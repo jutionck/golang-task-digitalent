@@ -9,9 +9,9 @@ import (
 type TaskRepository interface {
 	Insert(task *model.Task) error
 	Update(task *model.Task) error
-	Delete(id int) error
-	GetAll(page int, totalRow int) ([]model.Task, error)
-	GetById(id int) (model.Task, error)
+	Delete(id string) error
+	GetAll() ([]model.Task, error)
+	GetById(id string) (model.Task, error)
 }
 
 type taskRepository struct {
@@ -34,7 +34,7 @@ func (t *taskRepository) Update(task *model.Task) error {
 	return nil
 }
 
-func (t *taskRepository) Delete(id int) error {
+func (t *taskRepository) Delete(id string) error {
 	_, err := t.db.Exec("delete from m_task where id=?", id)
 	if err != nil {
 		return err
@@ -42,10 +42,8 @@ func (t *taskRepository) Delete(id int) error {
 	return nil
 }
 
-func (t *taskRepository) GetAll(page int, totalRow int) ([]model.Task, error) {
-	limit := totalRow
-	offset := limit * (page - 1)
-	rows, err := t.db.Query("select id, task, employee, deadline from m_task limit =? offset = ?", limit, offset)
+func (t *taskRepository) GetAll() ([]model.Task, error) {
+	rows, err := t.db.Query("select id, task, employee, deadline from m_task")
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +62,7 @@ func (t *taskRepository) GetAll(page int, totalRow int) ([]model.Task, error) {
 	return tasks, nil
 }
 
-func (t *taskRepository) GetById(id int) (model.Task, error) {
+func (t *taskRepository) GetById(id string) (model.Task, error) {
 	var task = model.Task{}
 	err := t.db.QueryRow("select id, task, employee, deadline from m_task where id = ?", id).Scan(&task.Id, &task.TaskDetail, &task.EmployeeName, &task.TaskDeadline)
 	if err != nil {

@@ -8,9 +8,9 @@ import (
 type TaskUseCase interface {
 	RegisterNewTask(task *model.Task) error
 	UpdateTask(task *model.Task) error
-	DeleteTask(id int) error
-	FindAll(page int, totalRow int) ([]model.Task, error)
-	FindById(id int) (model.Task, error)
+	DeleteTask(id string) error
+	FindAll() ([]model.Task, error)
+	FindById(id string) (model.Task, error)
 }
 
 type taskUseCase struct {
@@ -25,15 +25,15 @@ func (t *taskUseCase) UpdateTask(task *model.Task) error {
 	return t.repo.Update(task)
 }
 
-func (t *taskUseCase) DeleteTask(id int) error {
+func (t *taskUseCase) DeleteTask(id string) error {
 	return t.repo.Delete(id)
 }
 
-func (t *taskUseCase) FindAll(page int, totalRow int) ([]model.Task, error) {
-	return t.repo.GetAll(page, totalRow)
+func (t *taskUseCase) FindAll() ([]model.Task, error) {
+	return t.repo.GetAll()
 }
 
-func (t *taskUseCase) FindById(id int) (model.Task, error) {
+func (t *taskUseCase) FindById(id string) (model.Task, error) {
 	return t.repo.GetById(id)
 }
 

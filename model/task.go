@@ -1,10 +1,8 @@
 package model
 
-import "time"
-
 type Task struct {
-	Id           string
-	TaskDetail   string
-	EmployeeName string
-	TaskDeadline time.Time
+	Id           string `json:"id,omitempty"`
+	TaskDetail   string `json:"taskDetail"`
+	EmployeeName string `json:"employeeName"`
+	TaskDeadline string `json:"taskDeadline"`
 }
